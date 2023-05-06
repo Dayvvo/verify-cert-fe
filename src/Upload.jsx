@@ -1,36 +1,83 @@
-import { Flex, Box, Text, Img, Input, Button } from '@chakra-ui/react'
+import { Flex, Box, Text, Img, Input, Button, useToast } from '@chakra-ui/react'
 import { BiImage } from 'react-icons/bi'
 import { StyledButton } from './Login'
+import { useState } from 'react'
+import useAxios from './useAxios'
 
 const Upload = () => {
 
-    const inputBox = (label, placeholder) => {
+    const Axios = useAxios();
+
+    const [state,setState] = useState({
+        firstName:'',
+        lastName:'',
+        middleName:'',
+        departmant:'',
+        matricNo:'',
+        cgpa:''
+    });
+
+    const [loading,setLoading] = useState(false)
+ 
+
+    const onChangeFn = (e)=>{
+        setState(prev=>({
+            ...prev,
+            [e.target.name]:e.target.value
+        }))
+    }
+
+    const inputBox = (label,name ,placeholder) => {
         return <Box className='inter' my='20px'>
                     <Text fontWeight={'500'} fontSize='16px'>{label}</Text>
                     <Input 
-                        border={'1px solid #e8e8e8'} borderRadius='4px' placeholder={placeholder}
-                        p='16px' bg='#fafafa' h='56px' mt='10px'
+                     border={'1px solid #e8e8e8'} 
+                     name={name} onChange={onChangeFn}
+                     borderRadius='4px' placeholder={placeholder}
+                     p='16px' bg='#fafafa' h='56px' mt='10px'
                     />
                 </Box>
+    }
+
+    const toast = useToast();
+
+
+    const submitFn = async(e)=>{
+        e.preventDefault();
+
+        try{
+            const req = await Axios.post('/upload',state);
+
+            let {data}  = req;
+
+            console.log('response data to upload',data);
+        }
+        catch(err){
+
+            console.log('error payload to data',err)
+
+                
+        }
+
     }
 
     return (
         <>
             <Flex justify={'center'} flexDir={{ base: 'column-reverse', lg: 'row'}}>
-                <Box bgColor={'#fff'} p={{ base: '40px 25px', lg: '40px 100px' }} w='100%'>
+                <Box as='form' onSubmit={submitFn} bgColor={'#fff'} p={{ base: '40px 25px', lg: '40px 100px' }} w='100%'>
                     <Img src={'/icon.svg'} alt='futa-icon' w='41px' h='41px' mx={{ base: 'auto', lg: '0' }} />
                     <Box 
                         className='archivo' my='20px' fontSize={'32px'} color='#1A1A1A'
                         textAlign={{ base: 'center', lg: 'left'}}
                     >
                         <Text as={'span'} fontWeight='400'>Upload </Text>
-                        <Text as={'span'} fontWeight='600'>Transcript data</Text>
+                        <Text as={'span'} fontWeight='600'>User data</Text>
                     </Box>
                     <Text color={'#8F8989'} className='inter' fontSize={'16px'} fontWeight='400'
                     textAlign={{ base: 'center', lg: 'left'}}>
-                        Please provide Transcript information below
+                        Please provide User information below
                     </Text>
-                    <Flex my='20px' gap='40px' align='center'>
+                    {/* <Flex my='20px' gap='40px' align='center'>
                         <Box w='105px' h='105px' bgColor={'rgba(4, 9, 33, 0.04)'} borderRadius={'16px'}>
                             <Box 
                                 w='96px' h='96px' borderRadius={'16px'} bgColor='rgba(4, 9, 33, 0.04)' m='4.5px'
@@ -60,16 +107,16 @@ const Upload = () => {
                                 </Button>
                             </Flex>
                         </Box>
-                    </Flex>
+                    </Flex> */}
                     <Box>
-                        {inputBox('First name', 'John')}
-                        {inputBox('Last name', 'Peter')}
-                        {inputBox('Middle name', 'Akpan')}
-                        {inputBox('Department', 'Computer Engineering')}
-                        {inputBox('Matric Number', '2015/1/54402cp')}
-                        {inputBox('CGPA', '3.39')}
+                        {inputBox('First name', 'firstName','John')}
+                        {inputBox('Last name','lastName' ,'Peter')}
+                        {inputBox('Middle name','middleName' ,'Akpan')}
+                        {inputBox('Department','department', 'Computer Engineering')}
+                        {inputBox('Matric Number','matricNo', '2015/1/54402cp')}
+                        {inputBox('CGPA','cgpa' ,'3.39')}
                     </Box>
-                    <StyledButton className='archivo'>Upload</StyledButton>
+                    <StyledButton  type='submit' className='archivo'>Upload</StyledButton>
                 </Box>
                 <Box 
                     bgImg={'/studimage.png'} bgColor='#039EF4' w='100%'

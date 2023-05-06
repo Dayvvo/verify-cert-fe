@@ -1,8 +1,23 @@
-import { Flex, Box, Text, Img, Input, Button } from '@chakra-ui/react'
+import { Flex, Box, Text, Img, Input, Button, InputGroup, InputRightElement } from '@chakra-ui/react'
 import styled from 'styled-components'
-import { IoEyeSharp } from 'react-icons/io5'
+import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
+import { useState } from 'react'
 
 const Login = () => {
+
+    const [state,setState] = useState({
+        username:'',
+        password:''
+    })
+
+    const [passwordField,setPasswordField] = useState(true)
+
+    
+    const initiateLogin = ()=>{
+        
+    }
+
+
     return (
         <>
             <Flex justify={'center'} flexDir={{ base: 'column-reverse', lg: 'row'}}>
@@ -22,20 +37,30 @@ const Login = () => {
                     <Box className='inter' my='20px'>
                         <Text fontWeight={'500'} fontSize='16px'>Staff ID</Text>
                         <Input 
-                            border={'1px solid #e8e8e8'} borderRadius='4px' placeholder='2015/1/54402CP'
+                            border={'1px solid #e8e8e8'} borderRadius='4px' placeholder='FUTA/#20CYS'
                             p='16px' bg='#fafafa' h='56px' mt='10px'
                         />
                     </Box>
                     <Box className='inter' my='20px'>
                         <Text fontWeight={'500'} fontSize='16px'>Password</Text>
                         <Box pos='relative' mt='10px'>
+
+                        <InputGroup>
                             <Input 
-                                border={'1px solid #e8e8e8'} borderRadius='4px' placeholder='************'
-                                p='16px' bg='#fafafa' h='56px'
+                             border={'1px solid #e8e8e8'} borderRadius='4px' 
+                             placeholder='************' type={passwordField?'password':'text'}
+                             p='16px' bg='#fafafa' h='56px'
                             />
-                            <Button pos={'absolute'} right='0' top='10px' bg='none' _hover={{ bg: 'none' }}>
-                                <IoEyeSharp color='#039EF4' size={'22px'} />
-                            </Button>                            
+                            <InputRightElement h='full' cursor='pointer' display='flex' align='center'
+                             onClick={()=>setPasswordField(prev=>!prev)} children={
+                                 passwordField?
+                                <IoEyeSharp color='#039EF4' size={'22px'} />:
+                                <IoEyeOffSharp color='#039EF4' size={'22px'}  />
+
+                             } 
+                            />
+                        </InputGroup>
+
                         </Box>
                     </Box>
                     <StyledButton className='archivo'>Continue</StyledButton>
