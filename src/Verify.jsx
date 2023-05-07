@@ -77,8 +77,8 @@ const Verify =()=>{
                         <Box className='inter' my='20px'>
                             <Text fontWeight={'500'} fontSize='16px'>ID</Text>
                             <Input 
-                            border={'1px solid #e8e8e8'} borderRadius='4px' 
-                            placeholder='2015/1/54402CP' onChange={(e)=>setState(prev=>({
+                             border={'1px solid #e8e8e8'} borderRadius='4px' 
+                             onChange={(e)=>setState(prev=>({
                                 ...prev,
                                 id:e.target.value
                             }))}

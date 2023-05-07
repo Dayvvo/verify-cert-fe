@@ -1,27 +1,59 @@
-import { Flex, Box, Text, Img, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Flex, Box, Text, Img, Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react'
 import styled from 'styled-components'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 import { useState } from 'react'
-
+import useAxios from './useAxios'
+import { useNavigate} from 'react-router-dom'
 const Login = () => {
 
     const [state,setState] = useState({
-        username:'',
+        staffId:'',
         password:''
     })
 
     const [passwordField,setPasswordField] = useState(true)
 
+    const onChangeFn = (e)=>setState(prev=>({
+        ...prev,
+        [e.target.name]:e?.target?.value
+    }))
+
+    const toast = useToast();
     
-    const initiateLogin = ()=>{
+    const Axios = useAxios();
+
+    const Navigate = useNavigate();
+        
+    const initiateLogin = async(e)=>{
+        e?.preventDefault();
+        try {
+            let req = await Axios.post('/login',state);
+
+            let {data} = req;
+
+            sessionStorage.setItem('user-data',JSON.stringify(data))
+
+            toast({
+                status:'success',
+                title:'Login successful',
+                position:'top'
+            })
+            
+            Navigate('/home')
+
+        } 
+        catch (err) {
+            console.log('error occured',err)
+        }
 
     }
+
 
 
     return (
         <>
             <Flex justify={'center'} flexDir={{ base: 'column-reverse', lg: 'row'}}>
-                <Box bgColor={'#fff'} p={{ base: '40px 25px', lg: '40px 100px' }} w='100%'>
+                <Box as='form' onSubmit={initiateLogin} bgColor={'#fff'} p={{ base: '40px 25px', lg: '40px 100px' }} w='100%'>
                     <Img src={'/icon.svg'} alt='futa-icon' w='41px' h='41px' mx={{ base: 'auto', lg: '0' }} />
                     <Box 
                         className='archivo' my='20px' fontSize={'32px'} color='#1A1A1A'
@@ -37,8 +69,11 @@ const Login = () => {
                     <Box className='inter' my='20px'>
                         <Text fontWeight={'500'} fontSize='16px'>Staff ID</Text>
                         <Input 
-                            border={'1px solid #e8e8e8'} borderRadius='4px' placeholder='FUTA/#20CYS'
-                            p='16px' bg='#fafafa' h='56px' mt='10px'
+                         border={'1px solid #e8e8e8'} borderRadius='4px' 
+                         placeholder='FUTA/#20CYS' name='staffId' 
+                         onChange={onChangeFn}
+                         p='16px' bg='#fafafa' h='56px' 
+                         mt='10px'
                         />
                     </Box>
                     <Box className='inter' my='20px'>
@@ -49,6 +84,7 @@ const Login = () => {
                             <Input 
                              border={'1px solid #e8e8e8'} borderRadius='4px' 
                              placeholder='************' type={passwordField?'password':'text'}
+                             name='password' onChange={onChangeFn}
                              p='16px' bg='#fafafa' h='56px'
                             />
                             <InputRightElement h='full' cursor='pointer' display='flex' align='center'
@@ -63,7 +99,7 @@ const Login = () => {
 
                         </Box>
                     </Box>
-                    <StyledButton className='archivo'>Continue</StyledButton>
+                    <StyledButton type='submit' className='archivo'>Continue</StyledButton>
                 </Box>
                 <Box 
                     bgImg={'/studimage.png'} bgColor='#039EF4' w='100%' h={{ base: '100%', lg: '100vh' }}

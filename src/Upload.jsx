@@ -1,10 +1,27 @@
-import { Flex, Box, Text, Img, Input, Button, useToast } from '@chakra-ui/react';
-import { BiImage } from 'react-icons/bi';
+import { Flex, Box, Text, Img, Input, useToast } from '@chakra-ui/react';
 import { StyledButton } from './Login';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useAxios from './useAxios';
+import {  useNavigate } from 'react-router-dom';
 
 const Upload = () => {
+
+    const isAuthenticated = sessionStorage.getItem('user-data')
+    
+    let userData = isAuthenticated? JSON.parse(isAuthenticated):{}
+
+    console.log('user data',userData);
+
+    const {first_name} = userData;
+
+    const Navigate = useNavigate()
+
+    const NavigateRef = useRef(Navigate)
+
+    useEffect(()=>{
+      !isAuthenticated && NavigateRef.current('/login');
+    },[isAuthenticated])
+
 
     const Axios = useAxios();
 
@@ -19,7 +36,7 @@ const Upload = () => {
         cgpa:''
     });
 
-    const [loading,setLoading] = useState(false);
+    // const [loading,setLoading] = useState(false);
  
     const onChangeFn = (e)=>{
         setState(prev=>({
@@ -87,8 +104,8 @@ const Upload = () => {
                         className='archivo' my='20px' fontSize={'32px'} color='#1A1A1A'
                         textAlign={{ base: 'center', lg: 'left'}}
                     >
-                        <Text as={'span'} fontWeight='400'>Upload </Text>
-                        <Text as={'span'} fontWeight='600'>User data</Text>
+                        <Text as={'span'} fontWeight='400'>Welcome </Text>
+                        <Text as={'span'} fontWeight='600'>{first_name}</Text>
                     </Box>
                     <Text color={'#8F8989'} className='inter' fontSize={'16px'} fontWeight='400'
                     textAlign={{ base: 'center', lg: 'left'}}>
