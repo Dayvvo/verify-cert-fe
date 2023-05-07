@@ -1,4 +1,4 @@
-import { Flex, Box, Text, Img, Input, Button, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Flex, Box, Text, Img, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import styled from 'styled-components'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 import { useState } from 'react'
@@ -14,7 +14,7 @@ const Login = () => {
 
     
     const initiateLogin = ()=>{
-        
+
     }
 
 

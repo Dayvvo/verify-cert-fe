@@ -1,69 +1,86 @@
-import { Flex, Box, Text, Img, Input, Button, useToast } from '@chakra-ui/react'
-import { BiImage } from 'react-icons/bi'
-import { StyledButton } from './Login'
-import { useState } from 'react'
-import useAxios from './useAxios'
+import { Flex, Box, Text, Img, Input, Button, useToast } from '@chakra-ui/react';
+import { BiImage } from 'react-icons/bi';
+import { StyledButton } from './Login';
+import { useState } from 'react';
+import useAxios from './useAxios';
 
 const Upload = () => {
 
     const Axios = useAxios();
 
+    const toast = useToast();
+
     const [state,setState] = useState({
         firstName:'',
         lastName:'',
         middleName:'',
-        departmant:'',
+        department:'',
         matricNo:'',
         cgpa:''
     });
 
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(false);
  
-
     const onChangeFn = (e)=>{
         setState(prev=>({
             ...prev,
             [e.target.name]:e.target.value
         }))
-    }
+    };
 
     const inputBox = (label,name ,placeholder) => {
-        return <Box className='inter' my='20px'>
-                    <Text fontWeight={'500'} fontSize='16px'>{label}</Text>
-                    <Input 
-                     border={'1px solid #e8e8e8'} 
-                     name={name} onChange={onChangeFn}
-                     borderRadius='4px' placeholder={placeholder}
-                     p='16px' bg='#fafafa' h='56px' mt='10px'
-                    />
-                </Box>
-    }
-
-    const toast = useToast();
+        return (
+            <Box className='inter' my='20px'>
+                <Text fontWeight={'500'} fontSize='16px'>{label}</Text>
+                <Input 
+                    border={'1px solid #e8e8e8'} 
+                    name={name} onChange={onChangeFn}
+                    borderRadius='4px' placeholder={placeholder}
+                    p='16px' bg='#fafafa' h='56px' mt='10px'
+                />
+            </Box>
+        )
+    };
 
 
     const submitFn = async(e)=>{
+
         e.preventDefault();
 
         try{
+            console.log('user state',state)
+
             const req = await Axios.post('/upload',state);
 
             let {data}  = req;
 
+
+            data && toast({
+                title:'Success',
+                description:'User data saved successfully',
+                status:'success',
+                position:'top',
+                isClosable:true
+            });
+
             console.log('response data to upload',data);
+
+            
+
         }
         catch(err){
 
             console.log('error payload to data',err)
 
                 
-        }
+        };
 
-    }
+    };
 
     return (
         <>
             <Flex justify={'center'} flexDir={{ base: 'column-reverse', lg: 'row'}}>
+                
                 <Box as='form' onSubmit={submitFn} bgColor={'#fff'} p={{ base: '40px 25px', lg: '40px 100px' }} w='100%'>
                     <Img src={'/icon.svg'} alt='futa-icon' w='41px' h='41px' mx={{ base: 'auto', lg: '0' }} />
                     <Box 

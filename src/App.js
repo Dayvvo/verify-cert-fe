@@ -4,15 +4,17 @@ import Upload from './Upload';
 import Found from './Found';
 import Verify from './Verify';
 import NotFound from './NotFound';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      {/* <Login /> */}
-      {/* <Upload /> */}
-      {/*<Found /> */}
-      {/*<Verify /> */}
-      {<NotFound />}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={ <Verify/> } />
+          <Route path="/login" element={ <Login/> } />
+          <Route path="home" element={ <Upload/> } />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
